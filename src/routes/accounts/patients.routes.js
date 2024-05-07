@@ -55,7 +55,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/accounts/patients/:
+ * /patients/:
  *  get:
  *     summary: Get all patients
  *     description: Get all pets
@@ -65,11 +65,11 @@ const router = Router();
  *      500:
  *         description: Internal Server Error
  */
-router.get("/api/accounts/patients/", controller.getPatients);
+router.get("/patients/", controller.getPatients);
 
 /**
  * @swagger
- * /api/accounts/patients/{id}:
+ * /patients/{id}:
  *  get:
  *     summary: Get patient by id
  *     description: Get patient by id
@@ -84,33 +84,33 @@ router.get("/api/accounts/patients/", controller.getPatients);
  *      500:
  *         description: Internal Server Error
  */
-router.get("/api/accounts/patients/:id", controller.getPatient);
+router.get("/patients/:id", controller.getPatient);
 
 /**
  * @swagger
- * /api/accounts/patients/:
+ * /patients/:
  *  post:
  *     summary: Create patient
  *     description: Create patient
  *     parameters:
  *      - in: body
- *            first_name: 
+ *            first_name:
  *               sMaria
- *            last_name: 
+ *            last_name:
  *               Hernandez
- *            id_number: 
+ *            id_number:
  *               12121233
- *            birthdate: 
+ *            birthdate:
  *               01/10/2001
- *            country: 
+ *            country:
  *               Argentina
- *            phone_number: 
+ *            phone_number:
  *               3512212235
- *            gender: 
+ *            gender:
  *               Female
- *            email: 
+ *            email:
  *               maria@gmail.com
- *            password: 
+ *            password:
  *               maria123
  *     responses:
  *      200:
@@ -120,9 +120,9 @@ router.get("/api/accounts/patients/:id", controller.getPatient);
  *      500:
  *         description: Internal Server Error
  */
-router.post("/api/accounts/patients/", controller.createPatient);
+router.post("/patients/", controller.createPatient);
 
-router.put("/api/accounts/patients/:id", controller.updatePatient);
-router.delete("/api/accounts/patients/:id", controller.deletePatient);
+router.put("/patients/:id", controller.updatePatient);
+router.delete("/patients/:id", controller.deletePatient);
 
 export default router;
