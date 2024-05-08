@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
-import { Countrys } from "../../models/entities/countries.models.js";
-import { Users } from "../../models/entities/users.models.js";
-import { viewDocs } from "../../models/views/doctors.models.js";
+import { countrys } from "../../models/entities/countries.models.js";
 import { especialties } from "../../models/entities/especialties.models.js";
+import { users } from "../../models/entities/users.models.js";
+import { viewDocs } from "../../models/views/doctors.models.js";
 
 export const getDoctors = async (req, res) => {
 	try {
@@ -27,7 +27,6 @@ export const createDoctor = async (req, res) => {
 			dni,
 			gender,
 			specialty,
-			rol_id = 2,
 		} = body;
 		if (
 			!first_name ||
@@ -46,20 +45,28 @@ export const createDoctor = async (req, res) => {
 
 		const especialty = specialty;
 		const especialtyId = await especialties.findOne({ where: { especialty } });
-		
+
 		if (especialtyId === null) {
 			especialties.create({ especialty });
 		} else {
 			body.specialty = especialtyId?.dataValues.id;
 		}
 
-		const countryid = await Countrys.findOne({ where: { country } });
-		body.country_id = countryid?.dataValues.ID;
+		const countryid = await countrys.findOne({ where: { country } });
+		body.country_id = countryid?.dataValues.id;
 
 		const hashedPassword = await bcrypt.hash(body.password, 10);
 		body.password = hashedPassword;
 
-		const newDoctor = await Users.create(body);
+		body.rol_id = 2;
+
+		const newDoctor = await users.create(body);
+
+		const doctorCreatedID = await users.findOne({
+			where: { id: newDoctor.dataValues.id }
+		})
+
+		
 
 		res.status(201).json(newDoctor);
 	} catch (error) {

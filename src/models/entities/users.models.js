@@ -3,7 +3,7 @@ import { sequelize } from "../../database/database.js";
 
 const { UUID, STRING, DATEONLY, INTEGER } = DataTypes;
 
-export const Users = sequelize.define("Users", {
+export const users = sequelize.define("users", {
 	ID: {
 		type: UUID,
 		primaryKey: true,
