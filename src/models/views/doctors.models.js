@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../../database/database";
+import { sequelize } from "../../database/database.js";
 
 const { UUID, STRING, DATEONLY, INTEGER } = DataTypes;
 
@@ -8,6 +8,7 @@ export const viewDocs = sequelize.define(
 	{
 		id: {
 			type: UUID,
+			primaryKey: true,
 		},
 		first_name: {
 			type: STRING,
