@@ -1,16 +1,15 @@
-import bcrypt from "bcrypt";
-import { doctors } from "../../models/accounts/doctors.models.js";
+import { viewDocs } from "../../models/views/doctors.models.js";
 
 export const getDoctors = async (req, res) => {
 	try {
-		const allDoctors = await doctors.findAll();
-		res.json(allDoctors);
+		const viewAllDocs = await viewDocs.findAll();
+		res.json(viewAllDocs);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
 };
 
-export const getDoctor = async (req, res) => {
+/*export const getDoctor = async (req, res) => {
 	try {
 		const { id } = req.params;
 		const doctor = await doctors.findOne({ where: { id } });
@@ -92,4 +91,4 @@ export const deleteDoctor = async (req, res) => {
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
-};
+};*/
