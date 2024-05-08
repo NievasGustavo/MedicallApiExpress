@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
+import { roles } from "../../constantes.js";
 import { countrys } from "../../models/entities/countries.models.js";
+import { doctors } from "../../models/entities/doctors.models.js";
 import { especialties } from "../../models/entities/especialties.models.js";
 import { users } from "../../models/entities/users.models.js";
 import { viewDocs } from "../../models/views/doctors.models.js";
@@ -40,34 +42,26 @@ export const createDoctor = async (req, res) => {
 			password,
 			phone,
 			birthdate,
-			country,
+			country: countryPascal,
 			dni,
 			gender,
 			specialty,
 		} = body;
-		if (
-			!first_name ||
-			!last_name ||
-			!email ||
-			!password ||
-			!phone ||
-			!birthdate ||
-			!country ||
-			!dni ||
-			!gender ||
-			!specialty
-		) {
-			return res.status(400).json({ message: "Invalid request body" });
+
+		for (const key in body) {
+			if (!body[key]) {
+				return res.status(400).json({ message: "Invalid request body" });
+			}
 		}
 
 		const especialty = specialty;
 		const especialtyId = await especialties.findOne({ where: { especialty } });
 
-		if (especialtyId === null) {
-			especialties.create({ especialty });
-		} else {
-			body.specialty = especialtyId?.dataValues.id;
-		}
+		body.specialty = especialtyId.dataValues.id;
+
+		const country = countryPascal.replace(/\w+/g, function (w) {
+			return w[0].toUpperCase() + w.slice(1).toLowerCase();
+		});
 
 		const countryid = await countrys.findOne({ where: { country } });
 		body.country_id = countryid?.dataValues.id;
@@ -75,12 +69,14 @@ export const createDoctor = async (req, res) => {
 		const hashedPassword = await bcrypt.hash(body.password, 10);
 		body.password = hashedPassword;
 
-		body.rol_id = 2;
+		body.rol_id = roles.Doctor;
 
-		const newDoctor = await users.create(body);
+		const newUser = await users.create(body);
 
-		const doctorCreatedID = await users.findOne({
-			where: { id: newDoctor.dataValues.id },
+		const newDoctor = await doctors.create({
+			ID_USER: newUser.dataValues.id,
+			Rol: body.rol_id,
+			specialty_id: body.specialty,
 		});
 
 		res.status(201).json(newDoctor);

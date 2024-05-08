@@ -13,4 +13,7 @@ export const Roles = sequelize.define("Roles", {
 		type: STRING,
 		allowNull: false,
 	},
+},
+{
+	timeestamps: false,
 });
