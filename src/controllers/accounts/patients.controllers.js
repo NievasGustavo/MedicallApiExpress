@@ -3,7 +3,9 @@ import { patients } from "../../models/accounts/patients.models.js";
 
 export const getPatients = async (req, res) => {
 	try {
-		const allpatients = await patients.findAll();
+		const allpatients = await patients.findAll({
+			attributes: { exclude: ["password"] },
+		});
 		res.json(allpatients);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -13,8 +15,12 @@ export const getPatients = async (req, res) => {
 export const getPatient = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const patient = await patients.findOne({ where: { id } });
+		const patient = await patients.findOne({
+			where: { id },
+			attributes: { exclude: ["password"] },
+		});
 		if (!patient) {
+			// nunca entra se va directamente al catch
 			return res.status(404).json({ message: "Patient not found" });
 		}
 
@@ -27,36 +33,23 @@ export const getPatient = async (req, res) => {
 export const createPatient = async (req, res) => {
 	try {
 		const { body } = req;
-		const {
-			first_name,
-			last_name,
-			email,
-			password,
-			phone_number,
-			birthdate,
-			country,
-			id_number,
-			gender,
-		} = body;
-
-		if (
-			!first_name ||
-			!last_name ||
-			!email ||
-			!password ||
-			!phone_number ||
-			!birthdate ||
-			!country ||
-			!id_number ||
-			!gender
-		) {
-			return res.status(400).json({ message: "Invalid request body" });
+		const excludedFields = ["id", "createdAt", "updatedAt", "role"];
+		const requiredFields = Object.keys(patients.rawAttributes).filter(
+			(attribute) => !excludedFields.includes(attribute),
+		);
+		console.log(requiredFields);
+		for (const field of requiredFields) {
+			if (!body[field]) {
+				return res.status(400).json({ message: `Falto el campo ${field}` });
+			}
 		}
 
 		const hashedPassword = await bcrypt.hash(body.password, 10);
 		body.password = hashedPassword;
 
-		const newPatient = await patients.create(body);
+		const newPatient = await patients.create(body, {
+			attributes: { exclude: ["password"] },
+		});
 
 		res.status(201).json(newPatient);
 	} catch (error) {
