@@ -1,7 +1,7 @@
-import { sequelize } from "../../database/database.js";
 import { DataTypes } from "sequelize";
+import { sequelize } from "../../database/database.js";
 
-const { UUID, STRING, DATEONLY, INTEGER } = DataTypes;
+const { UUID, UUIDV4, STRING, DATEONLY, INTEGER } = DataTypes;
 
 export const patients = sequelize.define(
 	"patients",
@@ -9,7 +9,7 @@ export const patients = sequelize.define(
 		id: {
 			type: UUID,
 			primaryKey: true,
-			defaultValue: UUID,
+			defaultValue: UUIDV4,
 		},
 		first_name: {
 			type: STRING,
