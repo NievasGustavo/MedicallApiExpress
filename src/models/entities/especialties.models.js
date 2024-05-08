@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../database.js";
+import { sequelize } from "../../database/database.js";
 
 const { INTEGER, STRING } = DataTypes;
 
-export const Especialties = sequelize.define("Especialties", {
-	ID: {
+export const especialties = sequelize.define("especialties", {
+	id: {
 		type: INTEGER,
 		primaryKey: true,
 		autoIncrement: true,
@@ -13,4 +13,7 @@ export const Especialties = sequelize.define("Especialties", {
 		type: STRING,
 		allowNull: false,
 	},
-});
+},{
+	timestamps: false,
+}
+);
