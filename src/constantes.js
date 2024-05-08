@@ -22,8 +22,8 @@ export const countries = {
 };
 
 export const roles = {
-	Doctor: 1,
-	Paciente: 2,
+	Doctor: 2,
+	Paciente: 1,
 };
 
 export const specialties = {
