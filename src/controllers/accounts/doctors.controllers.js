@@ -1,8 +1,4 @@
 import bcrypt from "bcrypt";
-import { Countrys } from "../../models/entities/countries.models.js";
-import { especialties } from "../../models/entities/especialties.models.js";
-import { Users } from "../../models/entities/users.models.js";
-import { viewDocs } from "../../models/views/doctors.models.js";
 import { countrys } from "../../models/entities/countries.models.js";
 import { especialties } from "../../models/entities/especialties.models.js";
 import { users } from "../../models/entities/users.models.js";
@@ -67,7 +63,6 @@ export const createDoctor = async (req, res) => {
 		const especialty = specialty;
 		const especialtyId = await especialties.findOne({ where: { especialty } });
 
-
 		if (especialtyId === null) {
 			especialties.create({ especialty });
 		} else {
@@ -85,10 +80,8 @@ export const createDoctor = async (req, res) => {
 		const newDoctor = await users.create(body);
 
 		const doctorCreatedID = await users.findOne({
-			where: { id: newDoctor.dataValues.id }
-		})
-
-		
+			where: { id: newDoctor.dataValues.id },
+		});
 
 		res.status(201).json(newDoctor);
 	} catch (error) {
