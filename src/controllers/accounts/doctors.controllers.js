@@ -1,13 +1,30 @@
 import bcrypt from "bcrypt";
 import { Countrys } from "../../models/entities/countries.models.js";
+import { especialties } from "../../models/entities/especialties.models.js";
 import { Users } from "../../models/entities/users.models.js";
 import { viewDocs } from "../../models/views/doctors.models.js";
-import { especialties } from "../../models/entities/especialties.models.js";
 
 export const getDoctors = async (req, res) => {
 	try {
 		const viewAllDocs = await viewDocs.findAll();
-		res.json(viewAllDocs);
+
+		const formattedDocs = viewAllDocs.map((doctor) => ({
+			id: doctor.id,
+			name: {
+				first: doctor.first_name,
+				last: doctor.last_name,
+			},
+			dni: doctor.dni,
+			birthdate: doctor.birthdate,
+			phone: doctor.phone,
+			gender: doctor.gender,
+			email: doctor.email,
+			rol: doctor.rol_id,
+			specialty: doctor.specialty_name,
+			country: doctor.country_name,
+		}));
+
+		res.json(formattedDocs);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
@@ -46,7 +63,7 @@ export const createDoctor = async (req, res) => {
 
 		const especialty = specialty;
 		const especialtyId = await especialties.findOne({ where: { especialty } });
-		
+
 		if (especialtyId === null) {
 			especialties.create({ especialty });
 		} else {
