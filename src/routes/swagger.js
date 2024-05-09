@@ -1,35 +1,15 @@
-import swaggerJsdoc from "swagger-jsdoc";
+import fs from "fs";
 import swaggerUi from "swagger-ui-express";
+import yaml from "yaml";
 
-const options = {
-	definition: {
-		openapi: "3.0.0",
-		info: {
-			title: "Medicall API Express",
-			version: "1.0.0",
-		},
-		servers: [
-			{
-				url: "http://localhost:3000",
-			},
-		],
-	},
-	apis: ["src/routes/**/*.routes.js", "./database/database.js"],
-};
-
-// Docs en JSON
-
-const docsJson = swaggerJsdoc(options);
+const file = fs.readFileSync("./src/routes/swagger.yaml", "utf8");
+const swaggerYaml = yaml.parse(file);
 
 export const swaggerDocs = (app, port) => {
-	app.use(
-		"/api/docs",
-		swaggerUi.serve,
-		swaggerUi.setup(docsJson, { explorer: true }),
-	);
+	app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerYaml));
 	app.get("/api/docs.json", (req, res) => {
 		res.setHeader("Content-Type", "application/json");
-		res.send(docsJson);
+		res.send(swaggerYaml);
 	});
 
 	console.log(
