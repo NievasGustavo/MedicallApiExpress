@@ -1,0 +1,243 @@
+openapi: 3.0.3
+info:
+  title: Medicall API 
+  version: 1.0.0
+  description: |-
+    Medicall es una plataforma de telemedicina diseñada para mejorar la eficiencia en las consultas médicas. Nuestro objetivo principal es permitir el acceso a servicios médicos desde cualquier ubicación, facilitando así la atención médica remota. Esta plataforma busca ofrecer una experiencia fluida y conveniente para pacientes y profesionales de la salud, contribuyendo así a optimizar el proceso de atención médica, reduciendo los tiempos de espera y los costos de desplazamiento.
+
+    Esta api realiza: 
+    - Operaciones CRUD, para el manejo de los datos de los usuarios y de los    consultas.
+    - Operaciones de autenticación, para el acceso de usuarios y de la consulta.
+    - Operaciones CRUD para la creacion de turnos.
+
+    Algunos links de interés:
+    - [![](https://img.shields.io/badge/Repositorio-76908e?logo=github)](https://github.com/NievasGustavo/MedicallApiExpress)
+    - [![Deploy](https://vercel.com/button)](https://c17-70-m-python.vercel.app/login)
+    - [![](https://img.shields.io/badge/Video%20presentacion-df4343?logo=youtube)](https://youtu.be/EA-Yu3jgn0o?si=nYKVZ3REpthCAYx9)
+  
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+tags:
+  - name: Doctors
+    description: Operations about doctors
+
+paths:
+  /api/doctors:
+    get:
+      summary: Returns a list of all the users doctors
+      tags: [Doctors]
+      responses:
+        '200':
+          description: The list of the Doctors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Doctor'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error message'
+
+    post:
+      summary: Creates a new doctor
+      tags: [Doctors]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Doctor'
+      responses:
+        '201':
+          description: The doctor was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Doctor'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:  
+                    type: string
+                    example: 'Error message'
+
+  /api/doctors/{id}:
+    get:
+      summary: Returns the doctor with the specified id
+      tags: [Doctors]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The doctor id
+      responses:
+        '200':
+          description: The doctor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Doctor'
+        '404':
+          description: The doctor was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  message:
+                    type: string
+                    example: 'Doctor not found'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error message'
+    put:
+      summary: Updates the doctor with the specified id
+      tags: [Doctors]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The doctor id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Doctor'
+      responses:
+        '200':
+          description: The doctor was updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Doctor'
+        '404':
+          description: The doctor was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  message:
+                    type: string
+                    example: 'Doctor not found'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error message'
+
+    delete:
+      summary: Deletes the doctor with the specified id
+      tags: [Doctors]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The doctor id
+      responses:
+        '204':
+          description: The doctor was deleted successfully
+        '404':
+          description: The doctor was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  message:
+                    type: string
+                    example: 'Doctor not found'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error message'
+components:
+    schemas:
+      Doctor:
+        type: object
+        required:
+          - email
+        properties:
+          id:
+            type: string
+            description: The auto-generated id of the user
+          first_name:
+            type: string
+          last_name:
+            type: string
+          dni:
+            type: string
+          birthdate:
+            type: string
+            format: date
+          country_id:
+            type: integer
+            description: The country_id identifies the country of the user
+          phone:
+            type: integer
+            description: The phone number of the user
+          gender:
+            type: string
+          email:
+            type: string
+            description: The email of the user use for login
+          password:
+            type: string
+          rol_id:
+            type: integer
+            description: The role id identifies the user as a doctor 
+          specialty_id:
+            type: integer
+            description: The specialty id identifies the specialty of the doctor
+        example:
+          id: c7aea0e0-2ff2-43e9-9b58-aa3283ea5a8b
+          first_name: John
+          last_name: Doe
+          dni: 12345678
+          birthdate: 1990-01-01
+          country_id: 1  
+          phone: 123456789
+          gender: Male
+          email: 8b5Qm@example.com
+          password: 12345
+          rol_id: 2
+          specialty_id: 1
