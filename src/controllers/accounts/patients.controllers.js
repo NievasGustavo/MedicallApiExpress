@@ -1,10 +1,11 @@
 import bcrypt from "bcrypt";
 import { roles } from "../../constantes.js";
-import { Users } from "../../models/entities/users.models.js";
+import { patients } from "../../models/entities/patients.models.js";
+import { users } from "../../models/entities/users.models.js";
 
 export const getPatients = async (_, res) => {
 	try {
-		const allpatients = await Users.findAll({
+		const allpatients = await users.findAll({
 			attributes: { exclude: ["password"] },
 			where: { rol_id: roles.Paciente },
 		});
@@ -32,12 +33,11 @@ export const getPatients = async (_, res) => {
 export const getPatient = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const patient = await patients.findOne({
-			where: { id },
+		const patient = await users.findOne({
+			where: { id, rol_id: roles.Paciente },
 			attributes: { exclude: ["password"] },
 		});
 		if (!patient) {
-			// nunca entra se va directamente al catch
 			return res.status(404).json({ message: "Patient not found" });
 		}
 
@@ -50,23 +50,25 @@ export const getPatient = async (req, res) => {
 export const createPatient = async (req, res) => {
 	try {
 		const { body } = req;
-		const excludedFields = ["id", "createdAt", "updatedAt", "role"];
-		const requiredFields = Object.keys(patients.rawAttributes).filter(
+		const excludedFields = ["id", "rol_id"];
+		const requiredFields = Object.keys(users.rawAttributes).filter(
 			(attribute) => !excludedFields.includes(attribute),
 		);
-		console.log(requiredFields);
 		for (const field of requiredFields) {
 			if (!body[field]) {
 				return res.status(400).json({ message: `Falto el campo ${field}` });
 			}
 		}
-
 		const hashedPassword = await bcrypt.hash(body.password, 10);
 		body.password = hashedPassword;
-
-		const newPatient = await patients.create(body, {
-			attributes: { exclude: ["password"] },
-		});
+		body.rol_id = roles.Paciente;
+		const newUser = await users.create(body);
+		const objetPatient = {
+			id_user: newUser.dataValues.id,
+			rol: roles.Paciente,
+		};
+		console.log(objetPatient);
+		const newPatient = await patients.create(objetPatient);
 
 		res.status(201).json(newPatient);
 	} catch (error) {
@@ -77,13 +79,27 @@ export const createPatient = async (req, res) => {
 export const updatePatient = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const patient = await patients.findOne({ where: { id } });
+		const { body } = req;
+		const excludedFields = ["id", "rol_id"];
+		const requiredFields = Object.keys(users.rawAttributes).filter(
+			(attribute) => !excludedFields.includes(attribute),
+		);
+
+		Object.keys(body).forEach((key) => {
+			if (!requiredFields.includes(key)) {
+				return res.status(400).json({ message: `La columna no existe ${key}` });
+			}
+		});
+
+		const patient = await users.findOne({
+			where: { id, rol_id: roles.Paciente },
+		});
 		if (!patient) {
 			return res.status(404).json({ message: "Patient not found" });
 		}
 
-		const updatedPatient = await patient.update(req.body);
-		res.json(updatedPatient);
+		await users.update(body, { where: { id } });
+		res.json({ message: "El paciente fue actualizado exitosamente", id });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
@@ -92,7 +108,9 @@ export const updatePatient = async (req, res) => {
 export const deletePatient = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const patient = await patients.findOne({ where: { id } });
+		const patient = await users.findOne({
+			where: { id, rol_id: roles.Paciente },
+		});
 		if (!patient) {
 			return res.status(404).json({ message: "Patient not found" });
 		}
