@@ -24,4 +24,8 @@ export const Appointments = sequelize.define("Appointments", {
 	valid: {
 		type: BOOLEAN,
 	},
-});
+},
+{
+	timestamps: false,
+}
+);

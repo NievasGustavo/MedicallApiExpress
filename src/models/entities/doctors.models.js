@@ -3,16 +3,22 @@ import { sequelize } from "../../database/database.js";
 
 const { UUID, INTEGER } = DataTypes;
 
-export const Doctors = sequelize.define("Doctors", {
-	ID_USER: {
-		type: UUID,
-		primaryKey: true,
+export const doctors = sequelize.define(
+	"doctors",
+	{
+		id_user: {
+			type: UUID,
+			primaryKey: true,
+		},
+		rol: {
+			type: INTEGER,
+			defaultValue: 2,
+		},
+		specialty_id: {
+			type: INTEGER,
+		},
 	},
-	Rol: {
-		type: INTEGER,
-		defaultValue: 2,
+	{
+		timestamps: false,
 	},
-	specialty_id: {
-		type: INTEGER,
-	},
-});
+);
