@@ -64,8 +64,10 @@ export const createDoctor = async (req, res) => {
 			rol: body.rol_id,
 			specialty_id: body.specialty_id,
 		});
-
-		res.status(201).json({ newDoctor });
+		const doctor = await viewDocs.findOne({
+			where: { id: newDoctor.dataValues.id_user },
+		});
+		res.status(201).json({ doctor });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
@@ -79,8 +81,9 @@ export const getDoctor = async (req, res) => {
 		});
 		if (!doctor) {
 			return res.status(404).json({ message: "Doctor not found" });
+		} else {
+			res.status(200).json({ doctor });
 		}
-		res.status(200).json({ doctor });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
@@ -89,32 +92,37 @@ export const getDoctor = async (req, res) => {
 export const updateDoctor = async (req, res) => {
 	try {
 		const { id } = req.params;
-		
-		const doctor = await doctors.findOne({ where: { id_user: id } });
+
+		const doctor = await await users.findOne({
+			where: { id, rol_id: roles.Doctor },
+		});
 		if (!doctor) {
 			return res.status(404).json({ message: "Doctor not found" });
+		} else {
+			req.body.rol_id = roles.Doctor;
+			req.body.id = doctor.id_user;
+			const updatedDoctor = await users.update(req.body, { where: { id } });
+			res.json(doctor);
 		}
-
-		req.body.rol_id = roles.Doctor;
-		req.body.id = doctor.id_user;
-		const updatedDoctor = await users.update(req.body, { where: { id } });
-		res.json(doctor);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
 };
 
-/*
 export const deleteDoctor = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const doctor = await doctors.findOne({ where: { id } });
+		const doctor = await users.findOne({
+			where: { id, rol_id: roles.Doctor },
+		});
+
 		if (!doctor) {
 			return res.status(404).json({ message: "Doctor not found" });
+		} else {
+			await users.destroy({ where: { id } });
+			res.status(204).json({ message: "Doctor deleted successfully" });
 		}
-		await doctor.destroy();
-		res.status(204).json({ message: "Doctor deleted successfully" });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
-};*/
+};
