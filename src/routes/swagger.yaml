@@ -36,17 +36,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Doctor'
+                  $ref: '#/components/schemas/ViewsDocs'
         '500':
           description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Error message'
 
     post:
       summary: Creates a new doctor
@@ -56,25 +48,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Doctor'
+              $ref: '#/components/schemas/DoctorUser'
       responses:
         '201':
           description: The doctor was successfully created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doctor'
+                $ref: '#/components/schemas/ViewsDocs'
         '500':
           description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:  
-                    type: string
-                    example: 'Error message'
-
   /api/doctors/{id}:
     get:
       summary: Returns the doctor with the specified id
@@ -88,31 +71,15 @@ paths:
           description: The doctor id
       responses:
         '200':
-          description: The doctor
+          description: The doctor 
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doctor'
+                $ref: '#/components/schemas/ViewsDocs'
         '404':
           description: The doctor was not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: 
-                  message:
-                    type: string
-                    example: 'Doctor not found'
         '500':
           description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Error message'
     put:
       summary: Updates the doctor with the specified id
       tags: [Doctors]
@@ -128,34 +95,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Doctor'
+              $ref: '#/components/schemas/ViewsDocs'
       responses:
         '200':
           description: The doctor was updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doctor'
+                $ref: '#/components/schemas/Doctors'
         '404':
           description: The doctor was not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: 
-                  message:
-                    type: string
-                    example: 'Doctor not found'
+
         '500':
           description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Error message'
 
     delete:
       summary: Deletes the doctor with the specified id
@@ -172,34 +124,17 @@ paths:
           description: The doctor was deleted successfully
         '404':
           description: The doctor was not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: 
-                  message:
-                    type: string
-                    example: 'Doctor not found'
+
         '500':
           description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Error message'
+
 components:
     schemas:
-      Doctor:
+      DoctorUser:
         type: object
         required:
           - email
         properties:
-          id:
-            type: string
-            description: The auto-generated id of the user
           first_name:
             type: string
           last_name:
@@ -207,29 +142,28 @@ components:
           dni:
             type: string
           birthdate:
-            type: string
+            type: date
             format: date
           country_id:
             type: integer
-            description: The country_id identifies the country of the user
+            description: El country_id identifica el pais al que pertenece el usuario
           phone:
             type: integer
-            description: The phone number of the user
+            description: El phone identifica el numero de telefono del usuario
           gender:
             type: string
           email:
             type: string
-            description: The email of the user use for login
+            description: El email del usuario se utiliza para la autenticación
           password:
             type: string
           rol_id:
             type: integer
-            description: The role id identifies the user as a doctor 
+            description: El rol_id identifica el rol del usuario como doctor
           specialty_id:
             type: integer
-            description: The specialty id identifies the specialty of the doctor
+            description: El specialty_id identifica la especialidad del doctor
         example:
-          id: c7aea0e0-2ff2-43e9-9b58-aa3283ea5a8b
           first_name: John
           last_name: Doe
           dni: 12345678
@@ -240,4 +174,55 @@ components:
           email: 8b5Qm@example.com
           password: 12345
           rol_id: 2
+          specialty: Cardiologia
+
+      Doctors:
+        type: object
+        properties:
+          id_user:
+            type: string
+            description: El id_user es una llave foranea de la tabla users y indica el usuario al que pertenece el doctor
+          rol_id:
+            type: integer
+            description: El rol_id identifica el rol del usuario como doctor con una llave foranea de la tabla roles
+          specialty_id:
+            type: integer
+            description: El specialty_id identifica la especialidad del doctor con una llave foranea de la tabla specialty
+        example:
+          id_user: c7aea0e0-2ff2-43e9-9b58-aa3283ea5a8b
+          rol_id: 2
           specialty_id: 1
+      ViewsDocs: 
+        type: object
+        properties:
+          email:
+            type: string
+          password:
+            type: string
+          first_name:
+            type: string
+          last_name:
+            type: string
+          dni:
+            type: integer
+          birthdate:
+            type: integer
+          country_id:
+            type: integer
+          gender:
+            type: string
+          phone:
+            type: string
+          specialty_id:
+            type: integer
+        example:
+          id: c7aea0e0-2ff2-43e9-9b58-aa3283ea5a8b
+          name: {first_name: John, last_name: Doe }
+          dni: 12345678
+          birthdate: 1990-01-01
+          phone: 123456789
+          gender: Male
+          rol: 2
+          email: 8b5Qm@example.com
+          specialty: Cardiologia
+          country: Argentina

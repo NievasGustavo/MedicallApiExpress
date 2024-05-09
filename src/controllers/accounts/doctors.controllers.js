@@ -64,8 +64,10 @@ export const createDoctor = async (req, res) => {
 			rol: body.rol_id,
 			specialty_id: body.specialty_id,
 		});
-
-		res.status(201).json({ newDoctor });
+		const doctor = await viewDocs.findOne({
+			where: { id: newDoctor.dataValues.id_user },
+		});
+		res.status(201).json({ doctor });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
@@ -79,8 +81,9 @@ export const getDoctor = async (req, res) => {
 		});
 		if (!doctor) {
 			return res.status(404).json({ message: "Doctor not found" });
+		} else {
+			res.status(200).json({ doctor });
 		}
-		res.status(200).json({ doctor });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
