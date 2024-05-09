@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import doctorsRoutes from "./routes/accounts/doctors.routes.js";
 import patientsRoutes from "./routes/accounts/patients.routes.js";
+import authRoutes from "./routes/auth/auth.routes.js";
 const app = express();
 
 // Middlewares
@@ -12,5 +13,6 @@ app.disable("x-powered-by");
 // Routes
 app.use("/api", patientsRoutes);
 app.use("/api", doctorsRoutes);
+app.use("/api/auth", authRoutes);
 
 export default app;

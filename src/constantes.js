@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 export const countries = {
 	Argentina: 1,
 	Bolivia: 2,
@@ -73,3 +75,5 @@ export const medications = {
 	Estimulante: 33,
 	Vitamina: 34,
 };
+
+export const PRIVATE_KEY = process.env.PRIVATE_KEY;
