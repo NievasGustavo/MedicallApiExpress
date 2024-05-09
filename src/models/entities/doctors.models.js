@@ -6,11 +6,11 @@ const { UUID, INTEGER } = DataTypes;
 export const doctors = sequelize.define(
 	"doctors",
 	{
-		ID_USER: {
+		id_user: {
 			type: UUID,
 			primaryKey: true,
 		},
-		Rol: {
+		rol: {
 			type: INTEGER,
 			defaultValue: 2,
 		},

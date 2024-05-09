@@ -1,8 +1,6 @@
 import bcrypt from "bcrypt";
 import { roles } from "../../constantes.js";
-import { countrys } from "../../models/entities/countries.models.js";
 import { doctors } from "../../models/entities/doctors.models.js";
-import { especialties } from "../../models/entities/especialties.models.js";
 import { users } from "../../models/entities/users.models.js";
 import { viewDocs } from "../../models/views/doctors.models.js";
 
@@ -42,10 +40,10 @@ export const createDoctor = async (req, res) => {
 			password,
 			phone,
 			birthdate,
-			country: countryPascal,
+			country_id,
 			dni,
 			gender,
-			specialty,
+			specialty_id,
 		} = body;
 
 		for (const key in body) {
@@ -53,18 +51,6 @@ export const createDoctor = async (req, res) => {
 				return res.status(400).json({ message: "Invalid request body" });
 			}
 		}
-
-		const especialty = specialty;
-		const especialtyId = await especialties.findOne({ where: { especialty } });
-
-		body.specialty = especialtyId.dataValues.id;
-
-		const country = countryPascal.replace(/\w+/g, function (w) {
-			return w[0].toUpperCase() + w.slice(1).toLowerCase();
-		});
-
-		const countryid = await countrys.findOne({ where: { country } });
-		body.country_id = countryid?.dataValues.id;
 
 		const hashedPassword = await bcrypt.hash(body.password, 10);
 		body.password = hashedPassword;
@@ -74,25 +60,27 @@ export const createDoctor = async (req, res) => {
 		const newUser = await users.create(body);
 
 		const newDoctor = await doctors.create({
-			ID_USER: newUser.dataValues.id,
-			Rol: body.rol_id,
-			specialty_id: body.specialty,
+			id_user: newUser.dataValues.id,
+			rol: body.rol_id,
+			specialty_id: body.specialty_id,
 		});
 
-		res.status(201).json(newDoctor);
+		res.status(201).json({ newDoctor });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
 };
 
-/*export const getDoctor = async (req, res) => {
+export const getDoctor = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const doctor = await doctors.findOne({ where: { id } });
+		const doctor = await viewDocs.findOne({
+			where: { id },
+		});
 		if (!doctor) {
 			return res.status(404).json({ message: "Doctor not found" });
 		}
-		res.json(doctor);
+		res.status(200).json({ doctor });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
@@ -101,18 +89,22 @@ export const createDoctor = async (req, res) => {
 export const updateDoctor = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const doctor = await doctors.findOne({ where: { id } });
+		
+		const doctor = await doctors.findOne({ where: { id_user: id } });
 		if (!doctor) {
 			return res.status(404).json({ message: "Doctor not found" });
 		}
 
-		const updatedDoctor = await doctor.update(req.body);
-		res.json(updatedDoctor);
+		req.body.rol_id = roles.Doctor;
+		req.body.id = doctor.id_user;
+		const updatedDoctor = await users.update(req.body, { where: { id } });
+		res.json(doctor);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
 };
 
+/*
 export const deleteDoctor = async (req, res) => {
 	try {
 		const { id } = req.params;

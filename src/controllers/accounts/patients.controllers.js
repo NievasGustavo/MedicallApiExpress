@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { roles } from "../../constantes.js";
-import { Users } from "../../models/entities/users.models.js";
+import { users } from "../../models/entities/users.models.js";
 
 export const getPatients = async (_, res) => {
 	try {
