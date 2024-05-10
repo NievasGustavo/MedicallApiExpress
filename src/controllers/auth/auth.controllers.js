@@ -30,15 +30,22 @@ export const login = async (req, res) => {
 				sameSite: "none",
 				secure: true,
 			});
-			return res.status(200).json({ doctor });
+			return res.status(200).json({ user: doctor });
 		}
-        res.cookie("token", token, {
-				httpOnly: true,
-				sameSite: "none",
-				secure: true,
-			});
+		res.cookie("token", token, {
+			httpOnly: true,
+			sameSite: "none",
+			secure: true,
+		});
 		return res.status(200).json({ user });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}
+};
+
+export const logout = (req, res) => {
+	res.cookie("token", "", {
+		maxAge: 1,
+	});
+	return res.status(200).json({ message: "Logout successful" });
 };
