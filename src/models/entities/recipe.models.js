@@ -3,10 +3,10 @@ import { sequelize } from "../../database/database.js";
 
 const { INTEGER, STRING } = DataTypes;
 
-export const Recipe = sequelize.define(
-	"Recipe",
+export const recipe = sequelize.define(
+	"recipe",
 	{
-		ID: {
+		id: {
 			type: INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
@@ -15,11 +15,12 @@ export const Recipe = sequelize.define(
 			type: STRING,
 			allowNull: false,
 		},
-		ID_Prescription: {
+		id_prescription: {
 			type: DataTypes.UUID,
 		},
 	},
 	{
+		tableName: "recipe",
 		timestamps: false,
 	},
 );

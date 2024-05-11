@@ -3,26 +3,25 @@ import { sequelize } from "../../database/database.js";
 
 const { UUID, INTEGER } = DataTypes;
 
-export const Prescriptions = sequelize.define(
-	"Prescriptions",
+export const prescriptions = sequelize.define(
+	"prescriptions",
 	{
-		ID: {
+		id: {
 			type: INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		ID_Prescription: {
+		id_prescription: {
 			type: UUID,
 			allowNull: false,
-			unique: true,
 		},
-		ID_Patient: {
+		id_patient: {
 			type: UUID,
 		},
-		ID_Doctor: {
+		id_doctor: {
 			type: UUID,
 		},
-		ID_Medication: {
+		id_medication: {
 			type: INTEGER,
 		},
 	},

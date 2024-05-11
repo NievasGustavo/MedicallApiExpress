@@ -7,3 +7,17 @@ export function isTimeFormatValid(time) {
 export function isDateFormatValid(date) {
 	return /^\d{4}-\d{2}-\d{2}$/.test(date);
 }
+
+export function randomID(len) {
+	let result = "";
+	const chars =
+		"12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP";
+	const maxPos = chars.length;
+	let i = 0;
+	const length = len || 5;
+	for (i = 0; i < length; i++) {
+		result += chars.charAt(Math.floor(Math.random() * maxPos));
+	}
+
+	return result;
+}

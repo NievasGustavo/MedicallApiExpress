@@ -1,24 +1,33 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../database/database.js";
 
-const { INTEGER, UUID } = DataTypes;
+const { INTEGER, UUID, STRING, BOOLEAN } = DataTypes;
 
-export const Treatments = sequelize.define(
-	"Treatments",
+export const treatments = sequelize.define(
+	"treatments",
 	{
-		ID: {
+		id: {
 			type: INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		ID_Appointment: {
+		id_appointment: {
 			type: INTEGER,
 		},
-		ID_Patient: {
+		id_patient: {
 			type: UUID,
 		},
-		ID_Doctor: {
+		id_doctor: {
 			type: UUID,
+		},
+		id_room: {
+			type: STRING,
+		},
+		id_recipe: {
+			type: INTEGER,
+		},
+		is_valid: {
+			type: BOOLEAN,
 		},
 	},
 	{ timestamps: false },
