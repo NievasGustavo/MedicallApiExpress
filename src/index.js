@@ -1,6 +1,6 @@
 import "dotenv/config";
 import app from "./app.js";
-import { swaggerDocs as V1swaggerDocs } from "./routes/swagger.js";
+import { swaggerDocs as V1swaggerDocs } from "./docs/swagger.js";
 
 function main() {
 	try {
