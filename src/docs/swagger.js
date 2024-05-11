@@ -2,7 +2,7 @@ import fs from "fs";
 import swaggerUi from "swagger-ui-express";
 import yaml from "yaml";
 
-const file = fs.readFileSync("./src/routes/swagger.yaml", "utf8");
+const file = fs.readFileSync("./src/docs/swagger.yaml", "utf8");
 const swaggerYaml = yaml.parse(file);
 
 export const swaggerDocs = (app, port) => {

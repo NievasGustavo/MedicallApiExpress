@@ -22,6 +22,8 @@ servers:
 tags:
   - name: Doctors
     description: Operations about doctors
+  - name: Auth
+    description: Operations about authentication
 
 paths:
   /api/doctors:
@@ -128,6 +130,41 @@ paths:
         '500':
           description: Internal server error
 
+  /api/auth/login:
+    post:
+      summary: Logs in a user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: The user was successfully logged in
+          content:
+            Set-Cookie:
+              schema:
+                type: string
+                example: token=JWT_TOKEN; Path=/; HttpOnly; Secure; SameSite=None
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewsDocs'
+        '404':
+          description: The user was not found
+        '500':
+          description: Internal server error
+  /api/auth/logout:
+    post:
+      summary: Logs out a user
+      tags: [Auth]
+      responses:
+        '200':
+          description: The user was successfully logged out
+        '500':
+          description: Internal server error
+
 components:
     schemas:
       DoctorUser:
@@ -192,6 +229,7 @@ components:
           id_user: c7aea0e0-2ff2-43e9-9b58-aa3283ea5a8b
           rol_id: 2
           specialty_id: 1
+          
       ViewsDocs: 
         type: object
         properties:
@@ -226,3 +264,14 @@ components:
           email: 8b5Qm@example.com
           specialty: Cardiologia
           country: Argentina
+
+      Login:
+        type: object
+        properties:
+          email:
+            type: string
+          password:
+            type: string
+        example:
+          email: 8b5Qm@example.com
+          password: 12345
