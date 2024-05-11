@@ -9,8 +9,7 @@ export const verifyToken = async (token) => {
 	try {
 		return jwt.verify(token.token, PRIVATE_KEY);
 	} catch (error) {
-		console.log(error);
-		return null;
+		return error
 	}
 };
 
@@ -18,7 +17,6 @@ export const decodeToken = async (token) => {
 	try {
 		return jwt.decode(token.token);
 	} catch (error) {
-		console.log(error);
 		return null;
 	}
 };

@@ -15,8 +15,10 @@ export const authMiddleware = async (req, res, next) => {
 
 		const decodedToken = await verifyToken(tokenCookie);
 
-		if (!decodedToken.id) {
-			return res.status(401).json({ message: "Unauthorized" });
+		if (decodedToken instanceof Error) {
+			return res
+				.status(401)
+				.json({ message: "Unauthorized", error: decodedToken });
 		}
 
 		next();
