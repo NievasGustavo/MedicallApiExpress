@@ -1,4 +1,4 @@
-import { decodeToken, verifyToken } from "../../controllers/auth/libs/jwt.js";
+import { decodeToken, verifyToken } from "../../controllers/libs/jwt.js";
 
 export const authMiddleware = async (req, res, next) => {
 	try {

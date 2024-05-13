@@ -1,4 +1,4 @@
-import { verifyToken } from "../../controllers/auth/libs/jwt.js";
+import { verifyToken } from "../../controllers/libs/jwt.js";
 import { users } from "../../models/entities/users.models.js";
 
 export const checkRoleAuth = (roles) => async (req, res, next) => {

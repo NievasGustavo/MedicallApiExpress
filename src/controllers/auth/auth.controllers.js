@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { roles } from "../../constantes.js";
 import { users } from "../../models/entities/users.models.js";
 import { viewDocs } from "../../models/views/doctors.models.js";
-import { generateToken } from "./libs/jwt.js";
+import { generateToken } from "../../controllers/libs/jwt.js";
 
 export const login = async (req, res) => {
 	try {

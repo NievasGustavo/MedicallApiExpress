@@ -5,6 +5,7 @@ import doctorsRoutes from "./routes/accounts/doctors.routes.js";
 import patientsRoutes from "./routes/accounts/patients.routes.js";
 import appointment from "./routes/appointment.routes.js";
 import authRoutes from "./routes/auth/auth.routes.js";
+import pdfRecipeRoutes from "./routes/pdfRecipe.routes.js";
 const app = express();
 
 // Middlewares
@@ -18,5 +19,6 @@ app.use("/api", patientsRoutes);
 app.use("/api", appointment);
 app.use("/api", doctorsRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/pdf-recipe", pdfRecipeRoutes);
 
 export default app;

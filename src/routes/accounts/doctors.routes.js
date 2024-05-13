@@ -1,17 +1,12 @@
 import { Router } from "express";
-import {
-	createDoctor,
-	deleteDoctor,
-	getDoctor,
-	getDoctors,
-	updateDoctor,
-} from "../../controllers/accounts/doctors.controllers.js";
+import * as controller from "../../controllers/accounts/doctors.controllers.js";
+
 const router = Router();
 
-router.get("/doctors/", getDoctors);
-router.get("/doctors/:id", getDoctor);
-router.post("/doctors/", createDoctor);
-router.put("/doctors/:id", updateDoctor);
-router.delete("/doctors/:id", deleteDoctor);
+router.get("/doctors/", controller.getDoctors);
+router.get("/doctors/:id", controller.getDoctor);
+router.post("/doctors/", controller.createDoctor);
+router.put("/doctors/:id", controller.updateDoctor);
+router.delete("/doctors/:id", controller.deleteDoctor);
 
 export default router;
