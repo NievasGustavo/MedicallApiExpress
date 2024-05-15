@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <title>{{ title }}</title>
+</head>
+<body style=" font-family: 'Reddit Sans', sans-serif;">
+  <div class="{{classNameColor}}">
+    <div class="flex flex-col gap-4">
+      <div class="flex justify-between">
+        <div class="w-full max-w-96">
+          <div class="flex gap-4 p-3">
+            <div class="flex items-center justify-center">
+              <svg width="45" height="45" viewBox="0 0 56 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 50.7384V0H11.6978L27.7186 21.8905L43.7393 0H55.3587V25.3692V50.7384H44.6801V15.512L27.7186 38.5604L10.757 15.5844V50.7384H0Z" fill="currentColor" />
+              </svg>
+            </div>
+
+            <div class="flex flex-col">
+              <h1 class="text-2xl font-bold">{{doctor.prefix}} {{doctor.name.first}} {{doctor.name.last}}</h1>
+              <p class="text-balance text-xs">{{doctor.university}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex w-full items-start justify-end">
+          <div class="rounded-lg border border-current px-4 py-2">No. de Orden: <span class="text-2xl font-bold">{{order}}</span></div>
+        </div>
+      </div>
+      <div class="flex justify-between">
+        <div class="flex w-full max-w-96 gap-4">
+          <div class="flex w-full flex-col divide-y divide-current border border-current">
+            <div class="text-center">
+              <span class="ml-4 font-bold text-xl ">Paciente</span>
+            </div>
+            <div class="px-4 py-2">
+              <h2 class="text-lg font-bold">{{patient.name.first}} {{patient.name.last}}</h2>
+              <p class="text-balance text-sm">Edad: <span class="font-bold">{{patient.years}} años ({{patient.birthdate}})</span></p>
+              <p class="text-balance text-sm">Diagnostico: <span class="font-bold">{{diagnostic}}</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="flex w-full items-start justify-end">
+          <div class="flex flex-col">
+            <p><span class="font-bold">Consulta:</span> {{dateAppointment.date}} </p>
+            <p><span class="font-bold">Hora:</span> {{dateAppointment.time}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 flex flex-col gap-8">
+      <div class="flex flex-col border border-current divide-y divide-current">
+        <div class="text-center">
+          <span class="font-bold"> Medicamentos e Indicaciones </span>
+        </div>
+
+        <div class="flex flex-col px-10 py-5">
+          {{#each medications}}
+            <div>
+              <p><span class="text-2xl font-bold"> {{counter}}) {{name}} {{dosis}} - </span> <span class="text-xl"> {{recomandation}} </span></p>
+              <p class="font-medium">Observaciones:</p>
+              <span class="text-sm">{{comments}} </span>
+            </div>
+          {{/each}}
+        
+        </div>
+      </div>
+      <div class="flex flex-col border border-current divide-y divide-current">
+        <div class="text-center">
+          <span class="font-bold"> Medicamentos e Indicaciones </span>
+        </div>
+
+        <div class="flex flex-col px-10 py-5">Cuidar la ingesta de alimentos particularmente no comer proteinas en exceso, no alimentos procesados como jamon, salchichas y refrecis. Antes de ir a la playa, tomar el Aralen como se indica</div>
+      </div>
+    </div>
+
+    <div class="mt-5 flex flex-col gap-4">
+      <p>Al surtir esta receta, desaparecerá del sistema y no podrá volver a surtirla</p>
+
+      <div class="flex gap-4">
+        <div class="w-full">
+          <div class="flex items-center gap-4 ">
+            <img width="150" height="150" src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" alt="" />
+
+            <div>
+              <p class="font-bold">Sello electronico</p>
+              <p class="text-pretty text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis</p>
+            </div>
+          </div>
+          <p class="mt-4 text-xs">El uso que se le de a esta receta es responsabilidad del medico que preescribe, el usuario que la obtiene y el establecimiento que lo surte. para consultar los detalles referentes a validez e historial de esta receta, escanea el codigo QR en la parte superior de esta declaración.</p>
+        </div>
+
+        <div class="w-full items-center justify-center">
+          <div class="flex w-full items-center justify-center">
+            <img width="250" src="https://upload.wikimedia.org/wikipedia/commons/6/62/Joh_firma.png" alt="" />
+          </div>
+          <div class="text-center">
+            <h1 class="text-2xl font-bold">{{doctor.prefix}} {{doctor.name.first}} {{doctor.name.last}}</h1>
+            <p>{{doctor.direaction}}</p>
+            <p>tel. {{doctor.phone}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+</body>
+</html>
