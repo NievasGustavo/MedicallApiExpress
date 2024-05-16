@@ -7,6 +7,7 @@ import appointment from "./routes/appointment.routes.js";
 import authRoutes from "./routes/auth/auth.routes.js";
 import pdf from "./routes/pdf.routes.js";
 import prescription from "./routes/prescriptions.routes.js";
+import qr from "./routes/qr.routes.js";
 import recipe from "./routes/recipe.routes.js";
 import treatments from "./routes/treatments.routes.js";
 const app = express();
@@ -18,6 +19,7 @@ app.disable("x-powered-by");
 app.use(cookieParser());
 
 // Routes
+app.use("/api", qr);
 app.use("/api", pdf);
 app.use("/api", treatments);
 app.use("/api", patientsRoutes);

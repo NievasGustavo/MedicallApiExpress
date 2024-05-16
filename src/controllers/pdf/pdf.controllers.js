@@ -2,6 +2,7 @@ import fs from "fs";
 import handlebars from "handlebars";
 import path, { dirname } from "path";
 import puppeteer from "puppeteer";
+import qr from "qrcode";
 import { fileURLToPath } from "url";
 import { PDF } from "../../models/pdf/pdf.models.js";
 import { templateData } from "./helpers/constants.js";
@@ -11,6 +12,17 @@ import { templateData } from "./helpers/constants.js";
 
 export async function generatePDF(req, res) {
 	try {
+		// Create QR
+		const code = crypto.randomUUID(); // Genera un UUID único para el código del QR
+		const templateQR = `
+		El codigo QR es: ${code}.
+		Para validar la receta, por favor ingrese al siguiente link.
+		https://medicallapiexpress.vercel.app/qr/${code}
+		`;
+		const qrImage = await qr.toDataURL(templateQR);
+		// Guarda el código QR en la base de datos
+		//	await QRCode.create({ code });
+
 		// Obtener la ruta del directorio del archivo actual
 		const __filename = fileURLToPath(import.meta.url);
 		const __dirname = dirname(__filename);
@@ -26,9 +38,12 @@ export async function generatePDF(req, res) {
 
 		// Renderizar la plantilla HTML con Handlebars
 		const template = handlebars.compile(fs.readFileSync(templatePath, "utf8"));
-
+		const newTamplateQR = {
+			...templateData,
+			codeQR: qrImage,
+		};
 		// Datos para renderizar la plantilla (opcional)
-		const html = template(templateData);
+		const html = template(newTamplateQR);
 
 		// Lanzar una instancia de Puppeteer
 		const browser = await puppeteer.launch();
